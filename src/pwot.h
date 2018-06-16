@@ -13,7 +13,7 @@
 
 #define LONG_NAME	"PWoT Talker"
 #define SHORT_NAME	"PWoT"
-#define AUTHOR          "tneill"
+#define AUTHOR          "tpneill"
 #define EMAIL           "git@pwot.co.uk"
 
 #endif /* PWOT_H */

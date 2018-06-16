@@ -13,7 +13,7 @@ This is a historical relic written in 1999 as a learning exercise with no regard
 Installation
 ============
 
-Surprisingly this still actually compiles on runs on Ubuntu 16.04. Make sure you have the ```libxml2-dev``` package installed, then:
+Surprisingly this still actually compiles and runs on Ubuntu 16.04. Make sure you have the ```libxml2-dev``` package installed, then:
 
 1. Run ```./configure && make```
 
