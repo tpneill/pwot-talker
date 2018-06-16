@@ -50,6 +50,6 @@ extern int		inList(linkedList, void*);
 extern void* 		deleteObject(linkedList, void*);
 extern linkedListObject	firstObject(linkedList);
 
-#endif IN_LINKEDLIST_C
+#endif /* IN_LINKEDLIST_C */
 
 #endif
