@@ -1,0 +1,5 @@
+[17:56:38, 16/06/2018] initRooms(): loaded room 'rooms/god'
+[17:56:38, 16/06/2018] initRooms(): loaded room 'rooms/main'
+[17:56:38, 16/06/2018] initRooms(): loaded room 'rooms/other'
+[17:56:38, 16/06/2018] loadModule: loaded '/home/tneill/src/pwot-talker/src/modules/modstd.so'
+[17:56:38, 16/06/2018] initModules(): success
