@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<roomObject active="1" version="1" defaultRoom="1" label="main">
+<description>
+This is the main room description text, which needs to be tailored to some theme or other which I haven't quite got around to deciding on yet. This text should not have carraige returns at the end of lines as a neat little word wrap routine will fix that for people. This routine isn't that smart, however, and colour codes will most likely break it.
+</description>
+<details access="0" exit="1" topic="The Main Room" topicLock="0"/>
+</roomObject>

@@ -1,0 +1,253 @@
+userObject
+
+Defines : U_REVTELL=10, U_NORMLEN=80, U_BIGLEN=256
+
+   * unsigned char name[U_NORMLEN];
+
+     The user's login name, properly capitalised.
+
+   * unsigned char passwd[U_NORMLEN];
+
+     The user's password in UNIX crypt() format. This should never-ever-ever
+     be the plaintext password.
+
+   * unsigned char siteIp[4];
+
+     Numerical IP address of user's host - one character per quad. This will
+     need changing for IPv6.
+
+   * unsigned char siteHostname[U_BIGLEN];
+
+     Textual representation of the user's host. Either the reverse-resolved
+     hostname or a text version of the IP address.
+
+   * unsigned char verboseSite[U_BIGLEN];
+
+     A slightly longer description of the user's host. A way of signifying
+     the user's location without giving away their hostname.
+
+   * unsigned char email[U_BIGLEN];
+
+     User's email address.
+
+   * unsigned char url[U_BIGLEN];
+
+     User's WWW homepage address.
+
+   * unsigned char desc[U_BIGLEN];
+
+     User's self-set description for use in things like the .who listings.
+
+   * unsigned char lastTell[U_NORMLEN];
+
+     Last person the user talked to. Set in modules/std.c::cmdTell().
+
+   * unsigned char afkMessage[U_BIGLEN];
+
+     Set by the user to a short message when they go AFK. Currently unused.
+
+   * unsigned char siteDesc[U_BIGLEN];
+
+     Short text string describing the user's physical location, derived from
+     their hostname. Currently unused.
+
+   * unsigned char* revTell[U_REVTELL];
+
+     Ring buffer of past private tells. Currently unused.
+
+   * unsigned char termType[U_BIGLEN];
+
+     User's terminal type as discovered by the TELOPT_TTYPE telnet IAC
+     command. If the user's client doesn't send a response for this, it is
+     set to a default in socket.c::handleWWDD().
+
+   * unsigned char currentIac;
+
+     Used by the IAC handlers to hold what IAC the user last sent and is
+     being processed.
+
+   * unsigned char currentIacSb[U_BIGLEN];
+
+     A small buffer to hold subnegotiated answers from the user's client.
+
+   * unsigned int currentIacPos;
+
+     The index of the current position in the currentIacSb buffer.
+
+   * signed int (*inputCall)();
+
+     Called to handle any user input which is not an IAC command.
+
+   * unsigned int status;
+
+     User's current status (busy, talking, temporary etc.).
+
+   * unsigned int socket;
+
+     Socket filehandle.
+
+   * unsigned int lastLogin;
+
+     User's last login time (in UNIX time() format).
+
+   * unsigned int lastLoginDuration;
+
+     Duration (in seconds) of user's last login. Currently unused.
+
+   * unsigned int loginTime;
+
+     User's login time this session (in seconds). Currently unused.
+
+   * unsigned int totalTime;
+
+     User's total login time since creation (in seconds). Currently unused.
+
+   * unsigned int prompt;
+
+     Prompt flags. Used to determine if a prompt should be drawn with each
+     user input and how it should look. Currently unused.
+
+   * unsigned int flags;
+
+     Miscellaneous status flags.
+
+   * unsigned int level;
+
+     User's power level.
+
+   * unsigned int lastInput;
+
+     Last time this user sent any data (in UNIX time() format). Currently
+     unused.
+
+   * unsigned int inputsPerSec;
+
+     How many times this user has sent seperate inputs in the space of the
+     past second. Currently unused.
+
+   * unsigned int revTellPoint;
+
+     Index of the current position in the revTell ring buffer. Currently
+     unused.
+
+   * unsigned int screenWidth;
+
+     Width of the user's terminal in characters. Defaults to 80 if the
+     user's client can't send this data.
+
+   * unsigned int screenHeight;
+
+     Height of the user's terminal in characters. Defaults to 24 if the
+     user's client can't send this data.
+
+   * void *data;
+
+     A generic pointer that modules can use to point to structures they need
+     to store with the user that the rest of the talker doesn't know about.
+     Will never be altered or checked by any part of the talker core so
+     integrity is guaranteed.
+
+   * roomObject room;
+
+     The room the user is currently in.
+
+roomObject
+
+Defines : R_REVBUF=20, R_NORMLEN=80, R_BIGLEN=256
+
+   * unsigned char name[R_NORMLEN];
+
+     Contains the actual name of the room.
+
+   * unsigned char label[R_NORMLEN];
+
+     A short text description of the room, about 40 - 60 characters long.
+     For use in a list of rooms.
+
+   * unsigned char topic[R_BIGLEN];
+
+     The current room topic.
+
+   * unsigned char *description;
+
+     A long (several lines) description of the current room. The text in
+     this buffer will be wrapped to the user's screen width automatically
+     when being displayed and so it should contain no line breaks, only
+     paragraph breaks.
+
+   * unsigned char *revBuf[R_REVBUF];
+
+     The ring buffer for the review buffer.
+
+   * unsigned int access;
+
+     The user level required to enter the room.
+
+   * unsigned int exit;
+
+     The user level required to leave the room.
+
+   * unsigned int lock;
+
+     The user level required to unlock the topic to allow it to be changed.
+
+   * unsigned int revBufPoint;
+
+     Pointer to the current position in the review ring buffer.
+
+commandObject
+
+Defines : C_NORMLEN=12
+
+   * unsigned char name[C_NORMLEN];
+
+     Name of the command. What users need to type to call it.
+
+   * signed int (*call)();
+
+     Pointer to the function which handles the command calls.
+
+   * unsigned int level;
+
+     The level the user must be to call this command.
+
+   * unsigned int defLevel;
+
+     The default value for the command level.
+
+   * unsigned int unmovable;
+
+     If zero, then the command level can be changed. If nonzero then the
+     command level cannot be changed.
+
+moduleObject
+
+Defines : M_NORMLEN=80, M_BIGLEN=256
+
+   * unsigned char name[M_NORMLEN];
+
+     The name of the module. What it will be referred to in the talker from
+     commands.
+
+   * unsigned char file[M_BIGLEN];
+
+     The filename of the module binary.
+
+   * void *handle;
+
+     A pointer to the dynamic library handle for accessing the module code.
+
+   * unsigned int removable;
+
+     If zero, then the module cannot be removed and once loaded must stay
+     loaded. If nonzero then the module can be safely removed. Note that
+     even a non-removable module can be unloaded then immediatly reloaded
+     again.
+
+   * unsigned int useCount;
+
+     If non-zero, then other modules are dependant on this module staying
+     resident to operate correctly. To mark a module as being a dependancy
+     for another this should be increased in pwotInit(); (and the module
+     loaded by loadModule(); if necessary) and this decreased in
+     pwotRemove();

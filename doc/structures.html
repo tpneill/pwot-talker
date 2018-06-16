@@ -1,0 +1,297 @@
+<html>
+<head>
+<style type="text/css"><!--
+  body {
+    background: #ffffff;
+    color: #000000;
+  }
+  p {
+    margin-top: 8px;
+    margin-bottom: 8px;
+    margin-left: 8px;
+  }
+  .vartype {
+    font-weight: medium;
+    color: #880000;
+  }
+  .varname {
+    font-weight: medium;
+    color: #006600;
+  }
+  .varlen {
+    font-weight: medium;
+    color: #330066;
+  }
+--></style>
+</head>
+<body>
+<h2>userObject</h2>
+Defines : U_REVTELL=10, U_NORMLEN=80, U_BIGLEN=256
+<ul>
+
+<li><b class="vartype">unsigned char</b> <b class="varname">name</b>[<b class="varlen">U_NORMLEN</b>];<p>
+The user's login name, properly capitalised.
+</p>
+
+<li><b class="vartype">unsigned char</b> <b class="varname">passwd</b>[<b class="varlen">U_NORMLEN</b>];<p>
+The user's password in UNIX crypt() format. This should
+never-ever-ever be the plaintext password.
+</p>
+
+<li><b class="vartype">unsigned char</b> <b class="varname">siteIp</b>[<b class="varlen">4</b>];<p>
+Numerical IP address of user's host - one character
+per quad. This will need changing for IPv6.
+</p>
+
+<li><b class="vartype">unsigned char</b> <b class="varname">siteHostname</b>[<b class="varlen">U_BIGLEN</b>];<p>
+Textual representation of the user's host. Either the
+reverse-resolved hostname or a text version of the
+IP address.
+</p>
+
+<li><b class="vartype">unsigned char</b> <b class="varname">verboseSite</b>[<b class="varlen">U_BIGLEN</b>];<p>
+A slightly longer description of the user's host. A way of signifying
+the user's location without giving away their hostname.
+</p>
+
+<li><b class="vartype">unsigned char</b> <b class="varname">email</b>[<b class="varlen">U_BIGLEN</b>];<p>
+User's email address.
+</p>
+
+<li><b class="vartype">unsigned char</b> <b class="varname">url</b>[<b class="varlen">U_BIGLEN</b>];<p>
+User's WWW homepage address.
+</p>
+
+<li><b class="vartype">unsigned char</b> <b class="varname">desc</b>[<b class="varlen">U_BIGLEN</b>];<p>
+User's self-set description for use in things
+like the .who listings.
+</p>
+
+<li><b class="vartype">unsigned char</b> <b class="varname">lastTell</b>[<b class="varlen">U_NORMLEN</b>];<p>
+Last person the user talked to. Set in
+modules/std.c::cmdTell().
+</p>
+
+<li><b class="vartype">unsigned char</b> <b class="varname">afkMessage</b>[<b class="varlen">U_BIGLEN</b>];<p>
+Set by the user to a short message when they
+go AFK. Currently unused.
+</p>
+
+<li><b class="vartype">unsigned char</b> <b class="varname">siteDesc</b>[<b class="varlen">U_BIGLEN</b>];<p>
+Short text string describing the user's physical
+location, derived from their hostname. Currently
+unused.
+</p>
+
+<li><b class="vartype">unsigned char</b>* <b class="varname">revTell</b>[<b class="varlen">U_REVTELL</b>];<p>
+Ring buffer of past private tells. Currently
+unused.
+</p>
+
+<li><b class="vartype">unsigned char</b> <b class="varname">termType</b>[<b class="varlen">U_BIGLEN</b>];<p>
+User's terminal type as discovered by the
+TELOPT_TTYPE telnet IAC command. If the user's
+client doesn't send a response for this, it is
+set to a default in socket.c::handleWWDD().
+</p>
+
+<li><b class="vartype">unsigned char</b> <b class="varname">currentIac</b>;<p>
+Used by the IAC handlers to hold what IAC
+the user last sent and is being processed.
+</p>
+
+<li><b class="vartype">unsigned char</b> <b class="varname">currentIacSb</b>[<b class="varlen">U_BIGLEN</b>];<p>
+A small buffer to hold subnegotiated answers
+from the user's client.
+</p>
+
+<li><b class="vartype">unsigned int</b> <b class="varname">currentIacPos</b>;<p>
+The index of the current position in the
+currentIacSb buffer.
+</p>
+
+<li><b class="vartype">signed int</b> (*<b class="varname">inputCall</b>)();<p>
+Called to handle any user input which is not an
+IAC command.
+</p>
+
+<li><b class="vartype">unsigned int</b> <b class="varname">status</b>;<p>
+User's current status (busy, talking, temporary etc.).
+</p>
+
+<li><b class="vartype">unsigned int</b> <b class="varname">socket</b>;<p>
+Socket filehandle.
+</p>
+
+<li><b class="vartype">unsigned int</b> <b class="varname">lastLogin</b>;<p>
+User's last login time (in UNIX time() format).
+</p>
+
+<li><b class="vartype">unsigned int</b> <b class="varname">lastLoginDuration</b>;<p>
+Duration (in seconds) of user's last login.
+Currently unused.
+</p>
+
+<li><b class="vartype">unsigned int</b> <b class="varname">loginTime</b>;<p>
+User's login time this session (in seconds).
+Currently unused.
+</p>
+
+<li><b class="vartype">unsigned int</b> <b class="varname">totalTime</b>;<p>
+User's total login time since creation (in seconds).
+Currently unused.
+</p>
+
+<li><b class="vartype">unsigned int</b> <b class="varname">prompt</b>;<p>
+Prompt flags. Used to determine if a prompt should
+be drawn with each user input and how it should look.
+Currently unused.
+</p>
+
+<li><b class="vartype">unsigned int</b> <b class="varname">flags</b>;<p>
+Miscellaneous status flags.
+</p>
+
+<li><b class="vartype">unsigned int</b> <b class="varname">level</b>;<p>
+User's power level.
+</p>
+
+<li><b class="vartype">unsigned int</b> <b class="varname">lastInput</b>;<p>
+Last time this user sent any data (in UNIX time() format). Currently unused.
+</p>
+
+<li><b class="vartype">unsigned int</b> <b class="varname">inputsPerSec</b>;<p>
+How many times this user has sent seperate inputs in the
+space of the past second. Currently unused.
+</p>
+
+<li><b class="vartype">unsigned int</b> <b class="varname">revTellPoint</b>;<p>
+Index of the current position in the revTell ring buffer.
+Currently unused.
+</p>
+
+<li><b class="vartype">unsigned int</b> <b class="varname">screenWidth</b>;<p>
+Width of the user's terminal in characters. Defaults to 80
+if the user's client can't send this data.
+</p>
+
+<li><b class="vartype">unsigned int</b> <b class="varname">screenHeight</b>;<p>
+Height of the user's terminal in characters. Defaults to 24
+if the user's client can't send this data.
+</p>
+
+<li><b class="vartype">void</b> *<b class="varname">data</b>;<p>
+A generic pointer that modules can use to point to structures they
+need to store with the user that the rest of the talker doesn't
+know about. Will never be altered or checked by any part of the
+talker core so integrity is guaranteed.
+</p>
+
+<li><b class="vartype">roomObject</b> <b class="varname">room</b>;<p>
+The room the user is currently in.
+</p>
+
+</ul>
+
+<h2>roomObject</h2>
+Defines : R_REVBUF=20, R_NORMLEN=80, R_BIGLEN=256
+<ul>
+
+<li><b class="vartype">unsigned char</b> <b class="varname">name</b>[<b class="varlen">R_NORMLEN</b>];<p>
+Contains the actual name of the room.
+</p>
+
+<li><b class="vartype">unsigned char</b> <b class="varname">label</b>[<b class="varlen">R_NORMLEN</b>];<p>
+A short text description of the room, about 40 - 60 characters long. For use in
+a list of rooms.
+</p>
+
+<li><b class="vartype">unsigned char</b> <b class="varname">topic</b>[<b class="varlen">R_BIGLEN</b>];<p>
+The current room topic.
+</p>
+
+<li><b class="vartype">unsigned char</b> *<b class="varname">description</b>;<p>
+A long (several lines) description of the current room. The text in this
+buffer will be wrapped to the user's screen width automatically when being
+displayed and so it should contain no line breaks, only paragraph breaks.
+</p>
+
+<li><b class="vartype">unsigned char</b> *<b class="varname">revBuf</b>[<b class="varlen">R_REVBUF</b>];<p>
+The ring buffer for the review buffer.
+</p>
+
+<li><b class="vartype">unsigned int</b> <b class="varname">access</b>;<p>
+The user level required to enter the room.
+</p>
+
+<li><b class="vartype">unsigned int</b> <b class="varname">exit</b>;<p>
+The user level required to leave the room.
+</p>
+
+<li><b class="vartype">unsigned int</b> <b class="varname">lock</b>;<p>
+The user level required to unlock the topic to allow it to be changed.
+</p>
+
+<li><b class="vartype">unsigned int</b> <b class="varname">revBufPoint</b>;<p>
+Pointer to the current position in the review ring buffer.
+</p>
+</ul>
+
+<h2>commandObject</h2>
+Defines : C_NORMLEN=12
+<ul>
+
+<li><b class="vartype">unsigned char</b> <b class="varname">name</b>[<b class="varlen">C_NORMLEN</b>];<p>
+Name of the command. What users need to type to call it.
+</p>
+
+<li><b class="vartype">signed int</b> (*<b class="varname">call</b>)();<p>
+Pointer to the function which handles the command calls.
+</p>
+
+<li><b class="vartype">unsigned int</b> <b class="varname">level</b>;<p>
+The level the user must be to call this command.
+</p>
+
+<li><b class="vartype">unsigned int</b> <b class="varname">defLevel</b>;<p>
+The default value for the command level.
+</p>
+
+<li><b class="vartype">unsigned int</b> <b class="varname">unmovable</b>;<p>
+If zero, then the command level can be changed. If nonzero then the command
+level cannot be changed.
+</p>
+</ul>
+
+
+<h2>moduleObject</h2>
+Defines : M_NORMLEN=80, M_BIGLEN=256
+<ul>
+
+<li><b class="vartype">unsigned char</b> <b class="varname">name</b>[<b class="varlen">M_NORMLEN</b>];<p>
+The name of the module. What it will be referred to in the talker from commands.
+</p>
+
+<li><b class="vartype">unsigned char</b> <b class="varname">file</b>[<b class="varlen">M_BIGLEN</b>];<p>
+The filename of the module binary.
+</p>
+
+<li><b class="vartype">void</b> *<b class="varname">handle</b>;<p>
+A pointer to the dynamic library handle for accessing the module code.
+</p>
+
+<li><b class="vartype">unsigned int</b> <b class="varname">removable</b>;<p>
+If zero, then the module cannot be removed and once loaded must stay loaded. If
+nonzero then the module can be safely removed. Note that even a non-removable
+module can be unloaded then immediatly reloaded again.
+</p>
+
+<li><b class="vartype">unsigned int</b> <b class="varname">useCount</b>;<p>
+If non-zero, then other modules are dependant on this module staying resident
+to operate correctly. To mark a module as being a dependancy for another this
+should be increased in pwotInit(); (and the module loaded by loadModule(); if
+necessary) and this decreased in pwotRemove();
+</p></ul>
+
+</body>
+</html>

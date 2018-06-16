@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<roomObject active="1" version="1" defaultRoom="0" label="other">
+<description>
+This is another sample room which has the same properties as the main room except that users do not by default arrive here. Pretty simple stuff
+</description>
+<details access="0" exit="1" topic="Another Room" topicLock="0"/>
+</roomObject>
+

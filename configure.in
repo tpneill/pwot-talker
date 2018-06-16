@@ -1,0 +1,197 @@
+dnl ##################################################################
+dnl ## 
+dnl ## configure.in for PWoT - http://www.pwot.co.uk/
+dnl ##
+dnl ## E-mail any problems to support@pwot.co.uk  ;)
+dnl ##
+dnl ##################################################################
+
+dnl Process this file with autoconf to produce a configure script.
+
+#
+# Just checks that the file exists so configure can tell
+# if it's being run in the right directory
+#
+AC_INIT(src/baseCommands.c)
+
+#
+# Check for C Compiler
+#
+AC_PROG_CC
+
+#
+# Add -rdynamic tp CC opts
+#
+CFLAGS="-rdynamic -I./ $CFLAGS"
+
+#
+# Check for Libraries
+#
+# (Format is  AC_CHECK_LIB( <library> , <function_in_library> )
+AC_CHECK_LIB(crypt, crypt)
+AC_CHECK_LIB(dl, dlopen)
+AC_CHECK_LIB(system, gremlins)
+
+#
+# Check Debug flag
+#
+AC_MSG_CHECKING(if Debug enabled)
+AC_ARG_ENABLE(debug,
+[  --enable-debug          set debug flags],
+[ case "$enableval" in
+  yes)
+    AC_MSG_RESULT(yes)
+    CFLAGS="$CFLAGS -DDEBUG"
+    ;;
+  *)
+    AC_MSG_RESULT(no)
+    ;;
+esac ],
+  AC_MSG_RESULT(no)
+)
+
+#
+# Check Dmalloc
+#
+AC_MSG_CHECKING(if dmalloc selected)
+AC_ARG_WITH(dmalloc,
+[  --with-dmalloc          compile using dmalloc libraries],
+[ 
+  AC_MSG_RESULT(yes)
+  AC_CHECK_LIB(dmalloc, dmalloc_shutdown,
+  [
+    CFLAGS="$CFLAGS -DDMALLOC"
+    LIBS="$LIBS -ldmalloc"
+
+  ],
+  [
+    echo "*** Could not find dmalloc libraries."
+    echo "*** Check out the dmalloc homepage at http://dmalloc.com"
+    echo "*** or re-run configure without the --with-dmalloc option"
+    AC_MSG_ERROR([dmalloc required])
+  ]
+
+  )
+],
+  AC_MSG_RESULT(no)
+)
+
+
+# Check for libxml
+AC_ARG_WITH(xml-config, 
+[  --with-xml-config=DIR   xml-config is in DIR])
+
+AC_PATH_PROG(XML2_CONFIG, xml2-config, no, $PATH:$withval) 
+
+if test "$XML2_CONFIG" = "no" ; then 
+  AC_PATH_PROG(XML1_CONFIG, xml2-config, no, $PATH:$withval)
+  XML_CONFIG=$XML1_CONFIG
+else
+  XML_CONFIG=$XML2_CONFIG
+fi
+
+if test "$XML_CONFIG" = "no" ; then
+  echo "*** Could not find libxml. Check out the libxml homepage at " 
+  echo "*** http://xmlsoft.org/"
+  AC_MSG_ERROR([libxml required]) 
+else 
+  XML_LIBS=`$XML_CONFIG --libs` 
+  XML_CFLAGS=`$XML_CONFIG --cflags` 
+  LIBS="$LIBS $XML_LIBS" 
+  CFLAGS="$CFLAGS $XML_CFLAGS" 
+fi 
+
+# Check LibXML version
+  AC_MSG_CHECKING(libxml version) 
+
+  # Check if old or new style xml-config 
+  libxml_version=`$XML_CONFIG --version` 
+  libxml_version=`echo $libxml_version | sed 's/ //'` 
+
+    xml_config_major_version=`$XML_CONFIG --version | sed 's/\([[^(0-9)]]*\)\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\2/'`                                
+    xml_config_minor_version=`$XML_CONFIG --version | sed 's/\([[^(0-9)]]*\)\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\3/'`
+    xml_config_micro_version=`$XML_CONFIG --version | sed 's/\([[^(0-9)]]*\)\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\4/'`
+
+  # Display version
+  AC_MSG_RESULT($xml_config_major_version.$xml_config_minor_version.$xml_config_micro_version)
+
+  # If using v2.0.0 or greater compile with -DLIBXML2
+  if test $xml_config_major_version -gt 1; then
+    if test \( $xml_config_minor_version -lt 3 \) -o \( $xml_config_micro_version -lt 4 \); then
+      echo "*** libxml v2.3.4 or greater required"
+      echo "*** Download later version from http://xmlsoft.org/"
+      AC_MSG_ERROR([libxml v2.3.4 or greater required])
+    else
+      CFLAGS="$CFLAGS -DLIBXML2"    
+    fi
+  fi
+
+  # Check for late enough version of 1.x.x
+  if test $xml_config_major_version -lt 2; then
+    if test \( $xml_config_minor_version -lt 8 \) -o \( $xml_config_micro_version -lt 11 \); then
+      echo "*** libxml v1.8.11 or greater required"
+      echo "*** Download later version from http://xmlsoft.org/"
+      AC_MSG_ERROR([libxml v1.8.11 or greater required])
+    else
+      CFLAGS="$CFLAGS -DLIBXML2"
+    fi
+  fi
+
+
+
+#
+# Checks for header files.
+#
+AC_HEADER_DIRENT
+AC_HEADER_STDC
+AC_HEADER_SYS_WAIT
+AC_CHECK_HEADERS(fcntl.h sys/time.h unistd.h)
+
+#
+# Checks for typedefs, structures, and compiler characteristics.
+#
+AC_C_CONST
+AC_TYPE_PID_T
+AC_TYPE_SIZE_T
+AC_HEADER_TIME
+AC_STRUCT_TM
+
+#
+# Check for shared library support
+#
+AC_MSG_CHECKING(if ld supports -shared)
+case "`ld -v 2>/dev/null | grep GNU`" in
+  GNU*)
+    SHARED_LINK="-shared"
+    AC_MSG_RESULT(yes)	
+    ;;
+  *)
+    SHARED_LINK="-g"
+    AC_MSG_RESULT(no)
+    ;;
+esac
+LDFLAGS="$SHARED_LINK $LDFLAGS"
+
+#
+# Checks for library functions.
+#
+AC_TYPE_SIGNAL
+AC_FUNC_VPRINTF
+AC_CHECK_FUNCS(getcwd gethostname select socket uname)
+
+#
+# Make the Makefile
+#
+AC_OUTPUT(src/Makefile)
+
+echo ""
+echo "Compilation flags :"
+echo ""
+echo "       CC : $CC"
+echo "   CC_OPS : $CFLAGS"
+echo "   LD_OPS : $LIBS"
+echo " ld share : $SHARED_LINK"
+echo ""
+echo "Compile command : $CC $CFLAGS -c main.c"
+echo "     Final link : ld $SHARED_LINK $LIBS -o pwot *.o"
+echo ""

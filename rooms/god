@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<roomObject active="1" version="1" defaultRoom="0" label="god">
+<description>
+This is an example of a room with entrance and exit levels set. No-one can just walk in here unless their user->level >= UL_GOD. They also can't leave if they're forcable put here either because the exit level is set to UL_GOD too.
+</description>
+<details access="3" exit="3" topic="Da God Room" topicLock="0"/>
+</roomObject>
