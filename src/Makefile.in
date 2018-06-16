@@ -7,7 +7,7 @@ OBJS = linkedList.o user.o room.o command.o socket.o syslog.o misc.o \
        main.o baseCommands.o colour.o module.o bgTask.o event.o \
        revbuf.o
 
-MODULES = std sample message mail board net admin
+MODULES = std sample admin
 
 all: pwot
 	( cd modules && $(MAKE) CC='$(CC)' CC_OPS='$(CC_OPS)' LD_OPS='$(LD_OPS)' SHARED='$(SHARED)' MODULES='$(MODULES)' all ) || exit 1;
