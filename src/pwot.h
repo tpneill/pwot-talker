@@ -9,7 +9,7 @@
 #define PWOT_H
 
 
-#define VERSION		"0.7.0"
+#define VERSION		"0.7.1"
 
 #define LONG_NAME	"PWoT Talker"
 #define SHORT_NAME	"PWoT"
